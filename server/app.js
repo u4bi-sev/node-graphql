@@ -1,6 +1,7 @@
 const config  = require('./model/config'),
       restify = require('restify'),
-      corsMiddleware = require('restify-cors-middleware');
+      corsMiddleware = require('restify-cors-middleware'),
+      { graphqlRestify, graphiqlRestify } = require('apollo-server-restify');
 
 /* cross origin http */
 const cors = corsMiddleware( { origins: ['http://127.0.0.1:5500'] } );
@@ -9,6 +10,12 @@ const server = restify.createServer({
     version : config.version,
     url     : config.hostname
 });
+
+
+const graphQLOptions = {
+
+};
+
 
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
@@ -21,13 +28,10 @@ server.use((req, res, next) => {
 });
 
 
-server.post('/graphql', (req, res) => {
+server.post('/graphql', graphqlRestify(graphQLOptions));
+server.get('/graphql', graphqlRestify(graphQLOptions));
 
-});
+server.get('/graphiql', graphiqlRestify({ endpointURL: '/graphql' }));
 
-
-server.get('/graphql', (req, res) => {
-
-});
 
 server.listen(7778, () => console.log(server.name, server.url));
