@@ -1,7 +1,8 @@
 const config  = require('./model/config'),
       restify = require('restify'),
       corsMiddleware = require('restify-cors-middleware'),
-      { graphqlRestify, graphiqlRestify } = require('apollo-server-restify');
+      { graphqlRestify, graphiqlRestify } = require('apollo-server-restify'),
+      schema = require('./model/schema');
 
 /* cross origin http */
 const cors = corsMiddleware( { origins: ['http://127.0.0.1:5500'] } );
@@ -13,7 +14,7 @@ const server = restify.createServer({
 
 
 const graphQLOptions = {
-
+    schema : schema
 };
 
 
